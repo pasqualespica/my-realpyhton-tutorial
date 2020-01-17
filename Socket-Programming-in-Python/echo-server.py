@@ -22,7 +22,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     # Continuing with the server example, listen() enables a server to accept() connections. 
     # It makes it a “listening” socket:
+
+    # listen() has a backlog parameter. It specifies the number of unaccepted connections that the system will allow before refusing new connections
+    # If your server receives a lot of connection requests simultaneously, 
+    # increasing the backlog value may help by setting the maximum length 
+    # of the queue for pending connections. 
+    # The maximum value is system dependent
     # https: // serverfault.com/questions/518862/will-increasing-net-core-somaxconn-make-a-difference/519152
+
     s.listen()
     # accept() blocks and waits for an incoming connection
     # When a client connects, it returns a new socket object representing the connection 
@@ -30,10 +37,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # The tuple will contain(host, port) for IPv4 connections
     #  or (host, port, flowinfo, scopeid) for IPv6. 
     conn, addr = s.accept()
+    # Blocking Calls
+    # A socket function or method that temporarily suspends your
+    #  application is a blocking call.
+    #  For example, accept(), connect(), send(), and recv() “block.”
     with conn:
         print('Connected by', addr)
         while True:
             data = conn.recv(1024) # infinite while loop is used to loop over blocking calls to conn.recv().
+            # If conn.recv() returns an empty bytes object, b'', 
+            # then the client closed the connection and the loop is terminated. 
+            # The with statement is used with conn 
+            # to automatically close the socket at the end of the block
             if not data:
                 break
             conn.sendall(data)
