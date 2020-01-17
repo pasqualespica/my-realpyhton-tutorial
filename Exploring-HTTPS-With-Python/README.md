@@ -1,9 +1,10 @@
 
-
-
-# Useful links
+# Exploring HTTPS With Python
+> by Logan Jones  Jan 08, 2020 10 Comments  intermediate web-dev
 <!-- Following link is the mai article resource  -->
 https://realpython.com/python-https/
+
+# Useful links
 
 https://en.wikipedia.org/wiki/Transmission_Control_Protocol
 
