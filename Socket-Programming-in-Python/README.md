@@ -14,7 +14,7 @@ The primary socket API functions and methods in this module are:
 
 ![alt text](img/sockets-tcp-flow.png|width=100)
 
-![alt text](img/threewayhandshakeTCP.png|width=100)
+![alt text](img/threewayhandshakeTCP.png)
 
 ![alt text](img/conclusione-connessioneTCP.png|width=100)
 
