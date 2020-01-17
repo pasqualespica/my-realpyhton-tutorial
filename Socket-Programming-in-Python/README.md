@@ -12,11 +12,11 @@ In this repo could find few modifications as comment, print, as so on
 
 The primary socket API functions and methods in this module are:
 
-![alt text](img/sockets-tcp-flow.png | width=100)
+![alt text](img/sockets-tcp-flow.png|width=100)
 
-![alt text](img/threewayhandshakeTCP.png | width=100)
+![alt text](img/threewayhandshakeTCP.png|width=100)
 
-![alt text](img/conclusione-connessioneTCP.png | width=100)
+![alt text](img/conclusione-connessioneTCP.png|width=100)
 
 ```python
 socket()
@@ -43,10 +43,11 @@ https://docs.python.org/3/library/socket.html
 
 ## Useful commnad ( on macos )
 
+```
 lsof -nP -i4TCP:$PORT | grep LISTEN
 
 netstat -an -ptcp | grep LISTEN
-
+```
 
 
 ## Additional resources
@@ -55,14 +56,14 @@ https://realpython.com/python-sockets/#reference
 
 ## Notes ..
 
-The bufsize argument of 1024 used above is the maximum amount of data to be received at once. It doesn’t mean that recv() will return 1024 bytes.
+The bufsize argument of 1024 used above is the maximum amount of data to be received at once. It doesn’t mean that `recv()` will return 1024 bytes.
 
-send() also behaves this way. send() returns the number of bytes sent, which may be less than the size of the data passed in. You’re responsible for checking this and calling send() as many times as needed to send all of the data:
+`send()` also behaves this way. send() returns the number of bytes sent, which may be less than the size of the data passed in. You’re responsible for checking this and calling send() as many times as needed to send all of the data:
 
 
 > “Applications are responsible for checking that all data has been sent; if only some of the data was transmitted, the application needs to attempt delivery of the remaining data.” (Source)
 
-We avoided having to do this by using sendall():
+We avoided having to do this by using `sendall()`:
 
 > “Unlike send(), this method continues to send data from bytes until either all data has been sent or an error occurs. None is returned on success.” (Source)
 
