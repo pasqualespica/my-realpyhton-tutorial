@@ -6,16 +6,22 @@ import selectors
 import types
 
 sel = selectors.DefaultSelector()
-messages = [b"Message 1 from client.", b"Message 2 from client."]
+# messages = [b"Message 1 from client.", b"Message 2 from client."]
+messages = [b"Message 1 from client."]
 
 
 def start_connections(host, port, num_conns):
+    print("start_connections___START")
     server_addr = (host, port)
     for i in range(0, num_conns):
         connid = i + 1
         print("starting connection", connid, "to", server_addr)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setblocking(False)
+        # connect_ex() is used instead of connect() since connect() 
+        # would immediately raise a BlockingIOError exception. 
+        # connect_ex() initially returns an error indicator, errno.EINPROGRESS, 
+        # instead of raising an exception while the connection is in progress. 
         sock.connect_ex(server_addr)
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
         data = types.SimpleNamespace(
@@ -26,9 +32,12 @@ def start_connections(host, port, num_conns):
             outb=b"",
         )
         sel.register(sock, events, data=data)
+    print("start_connections___STOP")
 
 
+# Let’s look at service_connection(). It’s fundamentally the same as the server:
 def service_connection(key, mask):
+    print("service_connection___START")
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
@@ -47,8 +56,9 @@ def service_connection(key, mask):
             print("sending", repr(data.outb), "to connection", data.connid)
             sent = sock.send(data.outb)  # Should be ready to write
             data.outb = data.outb[sent:]
+    print("service_connection___STOP")
 
-
+# Main ...
 if len(sys.argv) != 4:
     print("usage:", sys.argv[0], "<host> <port> <num_connections>")
     sys.exit(1)

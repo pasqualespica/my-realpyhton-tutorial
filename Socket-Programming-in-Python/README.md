@@ -12,11 +12,11 @@ In this repo could find few modifications as comment, print, as so on
 
 The primary socket API functions and methods in this module are:
 
-![alt text](img/sockets-tcp-flow.png|width=100)
+![alt text](img/sockets-tcp-flow.png)
 
 ![alt text](img/threewayhandshakeTCP.png)
 
-![alt text](img/conclusione-connessioneTCP.png|width=100)
+![alt text](img/conclusione-connessioneTCP.png)
 
 ```python
 socket()
@@ -45,10 +45,18 @@ https://docs.python.org/3/library/socket.html
 
 ```
 lsof -nP -i4TCP:$PORT | grep LISTEN
-
+```
+or
+``` 
 netstat -an -ptcp | grep LISTEN
 ```
-
+> exmaple of `netstat` output
+```bash
+Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
+tcp4       0      0  127.0.0.1.65432        127.0.0.1.55672        ESTABLISHED
+tcp4       0      0  127.0.0.1.55672        127.0.0.1.65432        ESTABLISHED
+tcp4       0      0  127.0.0.1.65432        *.*                    LISTEN
+```
 
 ## Additional resources
 
@@ -69,7 +77,22 @@ We avoided having to do this by using `sendall()`:
 
 We have two problems at this point:
 
-How do we handle multiple connections concurrently?
-We need to call send() and recv() until all data is sent or received.
+* How do we handle multiple connections concurrently?
+* We need to call send() and recv() until all data is sent or received.
 
+***
+
+> TODO add IMAGE
+
+host byte order (LITTLE ENDIAN or BIG ENDIAN)
+network byte order (BIG ENDIAN)
+
+This byte order is referred to as a CPU’s endianness
+
+```bash
+python3 -c 'import sys; print(repr(sys.byteorder))'
+```
+
+
+http://www.serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html
 
