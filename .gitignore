@@ -1,3 +1,7 @@
 Exploring-HTTPS-With-Python/venv/*
 Socket-Programming-in-Python/venv/*
+Socket-Programming-in-Python/venv/*
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
 .DS_Store
