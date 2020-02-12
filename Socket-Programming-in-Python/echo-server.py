@@ -51,4 +51,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # to automatically close the socket at the end of the block
             if not data:
                 break
+            # “Unlike send(), this method continues to send data from bytes until either 
+            # all data has been sent or an error occurs. None is returned on success.”
             conn.sendall(data)

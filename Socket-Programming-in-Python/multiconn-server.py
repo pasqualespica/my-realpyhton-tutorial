@@ -49,6 +49,7 @@ def service_connection(key, mask):
             print("closing connection to", data.addr)
             sel.unregister(sock)
             sock.close()
+    # DEFAULT STATE for healthy socket !!!!!
     # When the socket is ready for writing, which should always be the case 
     # for a healthy socket
     if mask & selectors.EVENT_WRITE: 
