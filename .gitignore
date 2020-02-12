@@ -1,6 +1,4 @@
-Exploring-HTTPS-With-Python/venv/*
-Socket-Programming-in-Python/venv/*
-Socket-Programming-in-Python/venv/*
+*/venv/*
 */__pycache__/
 */*/__pycache__/
 */*/*/__pycache__/
