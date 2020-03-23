@@ -136,6 +136,8 @@ The shell command is used to set a shell-specific Python version. For example,
 $ pyenv shell 3.8-dev
 ```
 
-Specifying Your Python Version
+### Specifying Your Python Version
 ￼
+![alt text](img/SPYENV-VERSION.png)
+
 This pyramid is meant to be read from top to bottom. The first of these options that pyenv can find is the option it will use. Let’s see a quick example:
