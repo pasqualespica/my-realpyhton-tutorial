@@ -217,3 +217,12 @@ Why the multiprocessing Version Rocks
 The multiprocessing version of this example is great because it’s relatively easy to set up and requires little extra code. It also takes full advantage of the CPU power in your computer. The execution timing diagram for this code looks like this:
 
 
+...
+...
+
+### Conclusion
+You’ve now seen the basic types of concurrency available in Python:
+
+- threading
+- asyncio
+- multiprocessing
