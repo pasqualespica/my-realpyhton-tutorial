@@ -45,11 +45,12 @@ l = list(final_prices)
 
 print(l)
 
+# =========================
+# How to Supercharge Your Comprehensions
+# =========================
+
 # with list comprehension
 final_prices = [get_price_with_tax(i) for i in txns]
-
-
-# How to Supercharge Your Comprehensions
 
 # Using Conditional Logic
 
@@ -58,9 +59,11 @@ final_prices = [get_price_with_tax(i) for i in txns]
 # new_list = [expression(if conditional) for member in iterable]
 
 
-"""
-Using Set and Dictionary Comprehensions
+# =========================
+# Using Set and Dictionary Comprehensions
+# =========================
 
+"""
 While the list comprehension in Python is a common tool, 
 you can also create set and dictionary comprehensions. 
 A set comprehension is almost exactly the same as a list 
@@ -68,8 +71,8 @@ comprehension in Python.
 The difference is that set comprehensions make sure the output 
 contains no duplicates. You can create a set comprehension 
 by using curly braces instead of brackets:
-
 """
+
 # SET
 quote = "life, uh, finds a way"
 unique_vowels = {i for i in quote if i in 'aeiou'}
@@ -82,8 +85,11 @@ squares = {i: i * i for i in range(10)}
 print(squares)
 
 
+# =========================
 # Using the Walrus Operator
-
+# Python 3.8 will introduce the assignment expression, also known as the walrus operator
+# https://www.python.org/dev/peps/pep-0572/
+# =========================
 
 def get_weather_data():
     return random.randrange(90, 110)
@@ -102,9 +108,44 @@ hot_temps = [temp for _ in range(20) if (temp:=get_weather_data()) >= 100]
 
 print (hot_temps)
 
+
+# **********************************************
+# **********************************************
+# Watch Out for Nested Comprehensions
+# **********************************************
+# **********************************************
+
+### >>> to create combinations of lists, dictionaries, and sets within a collection.
+cities = ['Austin', 'Tacoma', 'Topeka', 'Sacramento', 'Charlotte']
+temps = {city: [0 for _ in range(7)] for city in cities}
+# temps
+# {
+#     'Austin': [0, 0, 0, 0, 0, 0, 0],
+#     'Tacoma': [0, 0, 0, 0, 0, 0, 0],
+#     'Topeka': [0, 0, 0, 0, 0, 0, 0],
+#     'Sacramento': [0, 0, 0, 0, 0, 0, 0],
+#     'Charlotte': [0, 0, 0, 0, 0, 0, 0]
+# }
+
+# >>> common way to create matrices
+
+matrix = [[i for i in range(5)] for _ in range(6)]
+# matrix
+# [
+#     [0, 1, 2, 3, 4],
+#     [0, 1, 2, 3, 4],
+#     [0, 1, 2, 3, 4],
+#     [0, 1, 2, 3, 4],
+#     [0, 1, 2, 3, 4],
+#     [0, 1, 2, 3, 4]
+# ]
+
+# >>>> such as flattening nested
 matrice_count = [[ i for e in range(i)] for i in range(5)]
 
 print(*matrice_count, sep="\n")
+
+# >>>>
 
 matrix = [ 
     [0, 0, 0],
@@ -116,6 +157,12 @@ flat = [num for row in matrix for num in row]
 
 print(flat)
 
-#  Choose Generators for Large Datasets
+# >>>  Choose Generators for Large Datasets
 
+# A generator doesn’t create a single, large data structure in memory, 
+# but instead returns an iterable
 print(sum([i * i for i in range(1000)]))
+
+# map() also operates lazily, meaning memory won’t be an issue if you choose to use it in this case:
+sum(map(lambda i: i*i, range(1000000000)))
+
