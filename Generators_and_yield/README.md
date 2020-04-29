@@ -1,6 +1,19 @@
 # How to Use Generators and yield in Python
 https://realpython.com/introduction-to-python-generators/
 
+
+![](https://hackaday.com/wp-content/uploads/2018/09/iterators1.png)
+
+![](https://files.realpython.com/media/t.ba63222d63f5.png)
+
+
+### other useful links
+https://realpython.com/python-for-loop/
+
+https://hackaday.com/2018/09/19/learn-to-loop-the-python-way-iterators-and-generators-explained/#comments
+
+
+
 Have you ever had to work with a dataset so large that it overwhelmed your machine’s memory? Or maybe you have a complex function that needs to maintain an internal state every time it’s called, but the function is too small to justify creating its own class. In these cases and more, generators and the Python yield statement are here to help.
 
 
