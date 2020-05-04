@@ -8,13 +8,15 @@ def grep(pattern,lines):
              yield line
 
 if __name__ == '__main__':
-    from follow import follow
+    from _01_follow import follow
 
     # Set up a processing pipe : tail -f | grep python
-    logfile  = open("access-log")
+    # logfile  = open("access-log")
+    logfile = open("/var/log/system.log")
     loglines = follow(logfile)
-    pylines  = grep("python",loglines)
+    # pylines  = grep("python",loglines)
+    pylines = grep("apple", loglines)
 
     # Pull results out of the processing pipeline
     for line in pylines:
-        print line,
+        print(line)
