@@ -6,6 +6,8 @@ https://realpython.com/python-https/
 
 # Useful links
 
+https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange#Cryptographic_explanation
+
 https://en.wikipedia.org/wiki/Transmission_Control_Protocol
 
 https://www.restapitutorial.com/

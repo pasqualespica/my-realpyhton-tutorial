@@ -3,7 +3,13 @@ import os
 from flask import Flask
 from cryptography.fernet import Fernet
 
-SECRET_KEY = os.environb[b"SECRET_KEY"]
+
+# from cryptography.fernet import Fernet
+# key = Fernet.generate_key()
+# key
+
+# SECRET_KEY = os.environb[b"SECRET_KEY"]
+SECRET_KEY = b"SwWRtuyI-xeIznp0BCLHdWVFx8WeuMd_Vdkvp0ljMBE ="
 SECRET_MESSAGE = b"fluffy tail"
 app = Flask(__name__)
 
