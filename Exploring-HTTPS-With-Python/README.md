@@ -5,6 +5,9 @@
 https://realpython.com/python-https/
 
 # Useful links
+https://robertheaton.com/2014/03/27/how-does-https-actually-work/
+
+http://www.di-srv.unisa.it/~ads/corso-security/www/CORSO-9900/SSL/main.htm
 
 https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange#Cryptographic_explanation
 

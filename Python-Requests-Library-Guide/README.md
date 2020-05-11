@@ -1,5 +1,7 @@
 # Python’s Requests Library (Guide)
 
+https://requests.readthedocs.io/projects/it/it/latest/user/advanced.html
+
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
 
 http://it.python-requests.org/it/latest/user/quickstart.html
