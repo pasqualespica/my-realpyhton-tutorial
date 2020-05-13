@@ -6,3 +6,4 @@ venv_reqlib/
 .DS_Store
 fake.log
 *.pem
+*.log
