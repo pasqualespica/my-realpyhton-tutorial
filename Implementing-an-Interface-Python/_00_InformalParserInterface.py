@@ -36,14 +36,19 @@ class EmlParser(InformalParserInterface):
         pass
 
 
+print("Main...")
+print()
 
 # Check if both PdfParser and EmlParser implement InformalParserInterface
-print(issubclass(PdfParser, InformalParserInterface))
-print(issubclass(EmlParser, InformalParserInterface))
-
+print(f"issubclass(PdfParser, InformalParserInterface) {issubclass(PdfParser, InformalParserInterface)}")
+print(f"issubclass(EmlParser, InformalParserInterface) {issubclass(EmlParser, InformalParserInterface)}")
+print()
 # TRUE  --- Al little bit weird !!!!
+print("Method Resolution Order(MRO) #1 .. ")
 print(PdfParser.__mro__)
 print(EmlParser.__mro__)
+
+print("\n ................................................................ \n")
 
 
 class FormalParserInterface(metaclass=abc.ABCMeta):
@@ -86,6 +91,7 @@ print(issubclass(PdfParserNew, FormalParserInterface))
 print(issubclass(EmlParserNew, FormalParserInterface))
 
 # TRUE and FALSE  --- now  !!!!
+print("\nMethod Resolution Order(MRO) #2 .. ")
 print(PdfParserNew.__mro__)
 print(EmlParserNew.__mro__)
 
@@ -93,6 +99,8 @@ print(EmlParserNew.__mro__)
 pdf_parser = PdfParserNew()
 eml_parser = EmlParserNew()
 
+
+print("\n ................................................................ \n")
 
 class FormalParserInterface(metaclass=abc.ABCMeta):
     @classmethod
@@ -144,7 +152,6 @@ class EmlParserNew(FormalParserInterface):
 print(issubclass(PdfParserNew, FormalParserInterface))
 print(issubclass(EmlParserNew, FormalParserInterface))
 
-# TRUE and FALSE  --- now  !!!!
 print(PdfParserNew.__mro__)
 print(EmlParserNew.__mro__)
 
