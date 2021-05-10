@@ -51,6 +51,8 @@ or
 netstat -an -ptcp | grep LISTEN
 ```
 > exmaple of `netstat` output
+
+
 ```bash
 Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
 tcp4       0      0  127.0.0.1.65432        127.0.0.1.55672        ESTABLISHED
