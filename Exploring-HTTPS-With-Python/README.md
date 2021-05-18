@@ -189,25 +189,6 @@ This covers the infrastructure required to create Python HTTPS applications in t
 
 <br>
 
-```python
-from pki.pki_helpers import generate_private_key, generate_public_key
-private_key = generate_private_key("ca-private-key.pem", "secret_password")
-private_key
-
-generate_public_key(
-  private_key,
-  filename="ca-public-key.pem",
-  country="US",
-  state="Maryland",
-  locality="Baltimore",
-  org="My CA Company",
-  hostname="my-ca.com",
-)
-```
-
-After importing your helper functions from pki_helpers, you first generate your private key and save it to the file ca-private-key.pem. You then pass that private key into generate_public_key() to generate your public key. In your directory you should now have two files:
-
-
 # What Does a Python HTTPS Application Look Like?
 It’s possible to set up the entire PKI infrastructure on your own machine, and this is exactly what you’ll be doing in this section. It’s not as hard as it sounds, so don’t worry! Becoming a real Certificate Authority is significantly harder than taking the steps below, but what you’ll read is, more or less, all you’d need to run your own CA.
 ## Becoming a Certificate Authority
@@ -215,7 +196,7 @@ A Certificate Authority is nothing more than a very important public and private
 
 Your initial public and private key pair will be a self-signed certificate. You’re generating the initial secret, so if you’re actually going to become a CA, then it’s incredibly important that this private key is safe. If someone gets access to the CA’s public and private key pair, then they can generate a completely valid certificate, and there’s nothing you can do to detect the problem except to stop trusting your CA.
 
-With that warning out of the way, you can generate the certificate in no time. For starters, you’ll need to generate a private key. Paste the following into a file called pki_helpers.py:
+With that warning out of the way, you can generate the certificate in no time. For starters, you’ll need to generate a private key. Paste the following into a file called `pki_helpers.py`:
 
 
 ```py
@@ -334,7 +315,7 @@ The first step to your server becoming trusted is for you to generate a ***Certi
 In the real world, the CSR would be sent to an actual Certificate Authority like Verisign or Let’s Encrypt. In this example, you’ll use the CA you just created.
 
 
-You’ll notice that, in order to create a CSR, you’ll need a private key first. Luckily, you can use the same generate_private_key()from when you created your CA’s private key. Using the above function and the previous methods defined, you can do the following:
+You’ll notice that, in order to create a `CSR`, you’ll need a private key first. Luckily, you can use the same `generate_private_key()` from when you created your CA’s private key. Using the above function and the previous methods defined, you can do the following:
 
 ```python
 from pki.pki_helpers import generate_csr, generate_private_key
@@ -356,12 +337,60 @@ generate_csr(
 ```
 
 
+After you run these steps in a console, you should end up with two new files:
+
+* `server-private-key.pem`: your server’s private key
+* `server-csr.pem`: your server’s CSR
+You can view your new CSR and private key from the console:
+
+```sh
+$ ls server*.pem
+server-csr.pem  server-private-key.pem
+```
+
+With these two documents in hand, you can now begin the process of signing your keys. Typically, lots of verification would happen in this step. In the real world, the CA would make sure that you owned `my-site.com` and ask you to prove it in various ways.
+
+Since you are the CA in this case, you can forego that headache create your very own verified public key. To do that, you’ll add another function to your `pki_helpers.py` file:
+
+```py
+
+# pki_helpers.py
+def sign_csr(csr, ca_public_key, ca_private_key, new_filename):
+    valid_from = datetime.utcnow()
+    valid_until = valid_from + timedelta(days=30)
+
+    builder = (
+        x509.CertificateBuilder()
+        .subject_name(csr.subject)
+        .issuer_name(ca_public_key.subject)
+        .public_key(csr.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(valid_from)
+        .not_valid_after(valid_until)
+    )
+
+    for extension in csr.extensions:
+        builder = builder.add_extension(extension.value, extension.critical)
+
+    public_key = builder.sign(
+        private_key=ca_private_key,
+        algorithm=hashes.SHA256(),
+        backend=default_backend(),
+    )
+
+    with open(new_filename, "wb") as keyfile:
+        keyfile.write(public_key.public_bytes(serialization.Encoding.PEM))
+
+```
+> This code looks very similar to `generate_public_key()` from the `generate_ca.py` file. In fact, they’re nearly identical. 
+
+
+
 The next step is to fire up the Python console and use `sign_csr().` 
 You’ll need to load your CSR and your CA’s private and public key. Begin by loading your CSR:
 
-
 In this section of code, you’re opening up your `server-csr.pem` 
-file and using x509.load_pem_x509_csr() to create your csr object. 
+file and using `x509.load_pem_x509_csr()` to create your csr object. 
 
 ```python
 from cryptography import x509
@@ -381,8 +410,8 @@ ca_public_key = x509.load_pem_x509_certificate(
 ca_public_key
 ```
 
-Once again, you’ve created a ca_public_key object which can be used by sign_csr().
-The x509 module had the handy load_pem_x509_certificate() to help. 
+Once again, you’ve created a `ca_public_key` object which can be used by `sign_csr()`.
+The `x509` module had the handy `load_pem_x509_certificate()` to help. 
 
 The final step is to load your CA’s private key:
 
@@ -410,12 +439,14 @@ sign_csr(csr, ca_public_key, ca_private_key, "server-public-key.pem")
 ```
 
 After running this, you should have three server key files in your directory:
->server-csr.pem  server-private-key.pem  server-public-key.pem
+```sh
+server-csr.pem  server-private-key.pem  server-public-key.pem
+```
 
 Whew! That was quite a lot of work. The good news is that now that you have your 
 private and public key pair, you don’t have to change any server code to start using it
 
-Using your original server.py file, run the following command to start your brand new Python HTTPS application:
+Using your original `server.py` file, run the following command to start your brand new Python HTTPS application:
 
 ```bash
 uwsgi \
@@ -426,7 +457,55 @@ uwsgi \
     --mount /=server:app
 ```
 
-uwsgi --master --https localhost:5683 server-public-key.pem,\ server-private-key.pem --mount /=server:app
+Congratulations! You now have a Python HTTPS-enabled server running with your very own private-public key pair, which was signed by your very own Certificate Authority!
+
+Now, all that’s left to do is query your server. First, you’ll need to make some changes to the client.py code:
+
+```py
+# client.py
+import os
+import requests
+
+def get_secret_message():
+    response = requests.get("https://localhost:5683")
+    print(f"The secret message is {response.text}")
+
+if __name__ == "__main__":
+    get_secret_message()
+```
+
+The only change from the previous code is from http to https. If you try to run this code, then you’ll be met with an error:
+
+```sh
+$ python client.py
+...
+requests.exceptions.SSLError: \
+    HTTPSConnectionPool(host='localhost', port=5683): \
+    Max retries exceeded with url: / (Caused by \
+    SSLError(SSLCertVerificationError(1, \
+    '[SSL: CERTIFICATE_VERIFY_FAILED] \
+    certificate verify failed: unable to get local issuer \
+    certificate (_ssl.c:1076)')))
+```
 
 
-uwsgi --plugin http,python --http-socket 127.0.0.1:5985     --env SECRET_KEY="8jtTR9QcD-k3RO9Pcd5ePgmTu_itJQt9WKQPzqjrcoM="     --mount /=symmetric_server:app
+If you want to avoid this message, then you have to tell requests about your Certificate Authority! 
+All you need to do is point requests at the `ca-public-key.pem` file that you generated earlier:
+
+```py
+# client.py
+def get_secret_message():
+    response = requests.get("http://localhost:5683", verify="ca-public-key.pem")
+    print(f"The secret message is {response.text}")
+
+```
+After doing that, you should be able to run the following successfully:
+
+```sh
+$ python client.py
+The secret message is fluffy tail
+```
+
+Nice! You’ve made a fully-functioning Python HTTPS server and queried it successfully. You and the Secret Squirrels now have messages that you can trade back and forth happily and securely!
+
+
